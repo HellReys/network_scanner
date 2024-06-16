@@ -1,6 +1,16 @@
 #!/usr/bin/env python
 
 import scapy.all as scapy
+import optparse
+
+
+def get_arguments():
+     parser = optparse.OptionParser()
+     parser.add_option("-i", "--ip", dest="ip", help="Ip to change its scanning ip")
+     (options, arguments) = parser.parse_args()
+     if not options.ip:
+         parser.error("[-] Please specify an ip, use --help for more info.")
+     return options
 
 def scan(ip):
     arp_request = scapy.ARP(pdst=ip)
@@ -20,6 +30,7 @@ def print_result(results_list):
     for client in results_list:
         print(client["ip"] + "\t\t" + client["MAC"])
 
+options = get_arguments()
 
-scan_result = scan("10.0.2.1/24")
+scan_result = scan(options.ip)
 print_result(scan_result)
